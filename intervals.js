@@ -21,7 +21,9 @@ async function getInterval() {
     })
     let warmupEl = document.querySelector("#warmup");
     let warmupLength = Number(warmupEl.value) * 60;
-    intervalList.unshift([warmupLength, "-"])
+    if(warmupLength >= 0 && typeof warmupLength == "number"){
+        intervalList.unshift([warmupLength, "-"])
+    }
     let titleEl = document.querySelector("#title");
     titleEl.textContent = selectEl.value;
 }
