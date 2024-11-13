@@ -1,0 +1,154 @@
+:root {
+    --background: rgb(38, 38, 38);
+    --text: rgb(255, 255, 255);
+    --border: rgb(45, 45, 45);
+    --button-hover: rgb(4, 78, 14);
+    --button-bg: rgb(5, 116, 20);
+}
+
+body {
+    background: var(--background);
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-sizing: border-box;
+}
+
+#header {
+    background-color: var(--background);
+    color: var(--text);
+    height: 10vh;
+    border: 2px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2vw;
+}
+
+#title {
+    font-size: 2rem;
+}
+
+img {
+    max-height: 100%;
+}
+
+#startInterval {
+    background-color: var(--background);
+    color: var(--text);
+    height: 85vh;
+    display: now;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+#select{
+    color:black;
+}
+
+#choose{
+    width: 15vw;
+    height: 10vw;
+    line-height: 10vw;
+    size: 30px;
+    background-color: var(--border);
+    padding: 1rem;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#choose:hover {
+    background-color: rgb(50,50,50);
+}
+
+#chooseInterval {
+    background-color: var(--background);
+    color: var(--text);
+    height: 85vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+#startButton {
+    background-color: var(--button-bg);
+    color: var(--text);
+    width: 20vw;
+    height: 40vh;
+    padding: 1rem;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#startButton:hover {
+    background-color: var(--button-hover);
+}
+
+/* Core flexbox container setup */
+#interval {
+    display: none;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: stretch;
+    height: 85vh;
+    width: 100vw; /* Ensure container spans full width */
+    background-color: var(--background);
+    color: var(--text);
+    border: 2px solid var(--border);
+    padding: 1rem;
+    box-sizing: border-box;
+    flex-wrap: nowrap; /* Prevent wrapping */
+}
+
+/* Child elements in the flex container */
+#tableDiv, #countdown, #targetPower {
+    flex: 1; /* Make all divs take equal width */
+    margin: 0.5rem; /* Margin between divs */
+    padding: 1rem;
+    border: 2px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+#tableDiv {
+    font-size: 3rem;
+}
+
+#power, #time {
+    text-align: center;
+    font-size: 8vw; /* Scales with viewport width */
+    margin-top: 10vh; /* Centers text vertically */
+}
+
+.even {
+    background-color: var(--border);
+}
+
+/* Media Queries for smaller screens */
+@media (max-width: 768px) {
+    #interval {
+        flex-direction: column; /* Stack divs vertically on smaller screens */
+    }
+
+    #tableDiv, #countdown, #targetPower {
+        flex-basis: 100%; /* Full width for each div in stacked layout */
+    }
+
+    #power, #time {
+        font-size: 15vw; /* Increase font size on smaller screens */
+    }
+}
