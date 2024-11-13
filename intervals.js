@@ -19,6 +19,9 @@ async function getInterval() {
     intervalList = intervals[chosenInterval].map((intervalAndTitle) => {
         return [intervalAndTitle["time"], intervalAndTitle["power"]];
     })
+    let warmupEl = document.querySelector("#warmup");
+    let warmupLength = Number(warmupEl.value) * 60;
+    intervalList.unshift([warmupLength, "-"])
     let titleEl = document.querySelector("#title");
     titleEl.textContent = selectEl.value;
 }
