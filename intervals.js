@@ -29,23 +29,23 @@ async function getInterval() {
 }
 
 async function getAllIntervals() {
-    fetch("https://gist.githubusercontent.com/augustrakvaag/b2a0bad0b826a77407f4a43983adbd2f/raw/")
-        .then(response => response.json())
-        .then(data => {
-            intervals = data;
-            let selectEl = document.querySelector("#select");
-            Object.keys(intervals)
-            .sort()
-            .forEach(key => {
-                let op = document.createElement("option");
-                op.value = key;
-                op.textContent = key;
-                selectEl.appendChild(op);
-            });
-        })
-        .then(() => {
-            console.log("Intervals loaded");
+    try{
+        const response = await fetch("https://gist.githubusercontent.com/augustrakvaag/b2a0bad0b826a77407f4a43983adbd2f/raw/")
+        const data = await response.json();
+        intervals = data;
+        Object.keys(intervals)
+        .sort()
+        .forEach(key => {
+            let op = document.createElement("option");
+            op.value = key;
+            op.textContent = key;
+            selectEl.appendChild(op);
         });
+        console.log("Intervals loaded");
+    } catch (error){
+        console.error("Error fetching intervals", error);
+    }
+    
 }
 
 async function startInterval() {
