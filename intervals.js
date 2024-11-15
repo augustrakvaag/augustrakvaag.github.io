@@ -70,15 +70,15 @@ async function main(array) {
 function countdown(start) {
     let timeEl = document.querySelector("#time");
     return new Promise((resolve) => { //Due to async behaviour in the main function, countdown has to return a promise
-        let currentCount = start;
+        const endTime = Date.now() + start * 1000;
         const interval = setInterval(() => {
-            timeEl.textContent = timeFormat(currentCount);
-            currentCount--;
-            if (currentCount < 0) {
+            let remainingTime = Math.max(0, Math.round((endTime - Date.now()) / 1000));
+            timeEl.textContent = timeFormat(remainingTime);
+            if (remainingTime == 0) {
                 clearInterval(interval);
                 resolve();
             }
-        }, 1000); // 1000 milliseconds = 1 second
+        }, 100);
     });
 }
 
