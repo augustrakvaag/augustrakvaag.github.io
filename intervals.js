@@ -2,9 +2,13 @@ let startButtonEl = document.querySelector("#startButton");
 let startIntervalEl = document.querySelector("#startInterval");
 let chooseEl = document.querySelector("#choose");
 let selectEl = document.querySelector("#select")
+let tableDivEl = document.querySelector("#tableDiv")
 
 let intervals = {};
 let intervalList = [];
+
+let compactMode = false;
+let hasWarmup = false;
 
 chooseEl.addEventListener("click", getInterval)
 startButtonEl.addEventListener("click", startInterval);
@@ -22,7 +26,12 @@ async function getInterval() {
     let warmupEl = document.querySelector("#warmup");
     let warmupLength = Number(warmupEl.value) * 60;
     if(warmupLength > 0 && typeof warmupLength == "number"){
-        intervalList.unshift([warmupLength, "-"])
+        intervalList.unshift([warmupLength, "-"]);
+        hasWarmup = true;
+    }
+    if(intervalList.length > 17){
+        compactMode = true;
+        tableDivEl.style.fontSize = "8vw";
     }
     let titleEl = document.querySelector("#title");
     titleEl.textContent = selectEl.value;
@@ -52,18 +61,32 @@ async function startInterval() {
     startIntervalEl.style.display = "none"; //Hides the start button
     let intervalDivEl = document.querySelector("#interval");
     intervalDivEl.style.display = "flex"; //Makes the main interval screen visible
-    createTable(intervalList);
+    if(!compactMode){
+        createTable(intervalList);
+    }
     main(intervalList);
 }
 
 async function main(array) {
     let powerEl = document.querySelector("#power");
     for (let i = 0; i < array.length; i++) {
-        powerEl.textContent = array[i][1]; //Sets target power
-        let currentArrow = document.querySelector("#t" + i);
-        currentArrow.textContent = "◄"; //Moves the arrow indicating where in the session you are
-        await countdown(array[i][0]);
-        currentArrow.textContent = "";
+        if(!compactMode){
+            powerEl.textContent = array[i][1]; //Sets target power
+            let currentArrow = document.querySelector("#t" + i);
+            currentArrow.textContent = "◄"; //Moves the arrow indicating where in the session you are
+            await countdown(array[i][0]);
+            currentArrow.textContent = "";
+        }
+        else{
+            powerEl.textContent = array[i][1];
+            if(hasWarmup){
+                tableDivEl.textContent = Math.floor(i/2) + "/" + array.length/2;
+            }
+            else{
+                tableDivEl.textContent = Math.ceil(i/2) + "/" + Math.ceil(array.length/2);
+            }
+            await countdown(array[i][0]);
+        }
     }
 }
 
@@ -107,7 +130,7 @@ function createTable(array) {
 }
 
 function timeFormat(seconds) {
-    min = Math.floor(seconds / 60);
-    sec = seconds % 60;
+    let min = Math.floor(seconds / 60);
+    let sec = seconds % 60;
     return min + ":" + sec.toString().padStart(2, "0");
 }
