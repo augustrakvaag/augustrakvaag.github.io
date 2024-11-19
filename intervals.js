@@ -88,6 +88,10 @@ async function main(array) {
             await countdown(array[i][0]);
         }
     }
+    powerEl.textContent = "-"
+    if(compactMode){
+        tableDivEl.textContent = Math.ceil(array.length/2) + "/" + Math.ceil(array.length/2);
+    }
 }
 
 function countdown(start) {
