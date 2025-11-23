@@ -2,7 +2,7 @@ let dagerTekstEl = document.querySelector("#dagerTekst");
 let morgenjoggTekstEl = document.querySelector("#morgenjoggTekst");
 let sekunderTekstEl = document.querySelector("#sekunderTekst");
 
-let start = 1749884400;
+let start = 1782568800;
 
 function calculateDifference(){
     let time = Date.now() / 1000;
@@ -16,7 +16,7 @@ function updatePage(seconds){
     let days = hours/24;
     let weeks = days/7;
 
-    dagerTekstEl.innerHTML = "Det er " + Math.floor(days) + " dager til Hove";
+    dagerTekstEl.innerHTML = "Det er " + Math.floor(days) + " dager til Trollveggen";
     morgenjoggTekstEl.innerHTML = Math.floor(weeks) + " morgenjogg";
     sekunderTekstEl.innerHTML = Math.floor(seconds) + " sekunder";
 }
