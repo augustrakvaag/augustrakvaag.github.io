@@ -7,25 +7,140 @@
     <style>
         body {
             background-color: #1f1f1f;
-            color: white;
+            color: #e0e0e0;
+            font-family: 'Inter', sans-serif;
         }
 
         #innpakning {
             margin: auto;
-            background-color: #484848;
+            background-color: #2a2a2a;
             width: 70%;
-            padding: 20px;
-            padding-left: 30px;
+            padding: 24px 32px;
+            border-radius: 8px;
+            border: 1px solid #3a3a3a;
         }
 
-        h1,h2,h3{
+        h1 {
             text-align: center;
+            font-size: 22px;
+            font-weight: 500;
+            letter-spacing: 0.04em;
+            font-family: 'IBM Plex Mono', monospace;
+            margin: 0 0 24px;
+        }
 
+        .inputdiv {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 10px;
+            padding: 10px 12px;
+            border-left: 3px solid #2d5a3d;
+            background: #242424;
+            border-radius: 0 6px 6px 0;
+        }
+
+        input {
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid #3a3a3a;
+            color: #e0e0e0;
+            padding: 4px 2px;
+            font-size: 14px;
+            font-family: inherit;
+            outline: none;
+            width: 100%;
+        }
+
+        input[id^="buyIn"],
+        input[id^="chips"] {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 13px;
+        }
+
+        input::placeholder { color: #555; font-size: 12px; }
+        input:focus { border-bottom-color: #2d5a3d; }
+
+        #buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 16px;
+        }
+
+        button {
+            padding: 8px 18px;
+            border-radius: 5px;
+            font-size: 13px;
+            font-family: inherit;
+            cursor: pointer;
+            border: 1px solid #3a3a3a;
+            background: #333;
+            color: #e0e0e0;
+            transition: background 0.15s;
+        }
+
+        button:hover { background: #3a3a3a; }
+
+        #submit {
+            background: #2d5a3d;
+            border-color: #2d5a3d;
+            font-weight: 500;
+        }
+
+        #submit:hover { background: #356b49; }
+
+        #result {
+            margin-top: 20px;
+            padding-top: 16px;
+            border-top: 1px solid #333;
+            min-height: 24px;
+        }
+
+        #errors {
+            color: #c0392b;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 13px;
+            min-height: 18px;
+            margin: 0;
+        }
+
+        #payments {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 13px;
+            color: #9fcfb3;
+            line-height: 2;
+            margin: 0;
         }
     </style>
 </head>
 
 <body>
+    <div id="innpakning">
+        <h1>Poker payments</h1>
+        <div id="inputs">
+            <div id="fields">
+                <div id="player1" class="inputdiv">
+                    <input id="name1" placeholder="Name...">
+                    <input id="buyIn1" placeholder="Bought in for...">
+                    <input id="chips1" placeholder="Chips at end of game...">
+                </div>
+                <div id="player2" class="inputdiv">
+                    <input id="name2" placeholder="Name...">
+                    <input id="buyIn2" placeholder="Bought in for...">
+                    <input id="chips2" placeholder="Chips at end of game...">
+                </div>
+            </div>
+            <div id="buttons">
+                <button id="submit">Submit</button>
+                <button id="addPlayer">Add player</button>
+                <button id="removePlayer">Remove player</button>
+            </div>
+        </div>
+        <div id="result">
+            <p id="errors"></p>
+            <p id="payments"></p>
+        </div>
+    </div>
     <script type="text/javascript" src="poker.js"></script>
 </body>
 </html>

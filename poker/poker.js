@@ -1,9 +1,9 @@
 class Player {
     constructor(name, buyIn, chips) {
         this.name = name;
-        this.buyIn = buyIn
-        this.chips = chips
-        this.net = chips-buyIn
+        this.buyIn = buyIn;
+        this.chips = chips;
+        this.net = chips-buyIn;
     }
 }
 
@@ -15,21 +15,109 @@ class Payment {
     }
 
     toString() {
-        return this.payer.name + " pays " + this.payee.name + " " + this.amount
+        return this.payer.name + " pays " + this.payee.name + " " + this.amount;
     }
 }
+
+let currentPlayers = 2;
+
+let submitEl = document.querySelector("#submit");
+let addPlayerEl = document.querySelector("#addPlayer");
+let removePlayerEl = document.querySelector("#removePlayer");
+let fieldsEl = document.querySelector("#fields");
+let errorsEl = document.querySelector("#errors");
+let paymentsEl = document.querySelector("#payments")
+
+addPlayerEl.addEventListener("click", addPlayer);
+removePlayerEl.addEventListener("click", removePlayer);
+submitEl.addEventListener("click", submit);
 
 player1 = new Player("August", 100, 150);
 player2 = new Player("Josef",100, 50);
 player3 = new Player("Kristian",100,75)
-player4 = new Player("Jack",100,175)
-player5 = new Player("Bendik",100,50)
+player4 = new Player("Jack",100,175);
+player5 = new Player("Bendik",100,50);
 players = [];
 players.push(player1);
 players.push(player2);
 players.push(player3);
 players.push(player4);
 players.push(player5);
+
+function addPlayer() {
+    clearText();
+    currentPlayers += 1;
+    let newDiv = document.createElement("div");
+    newDiv.id = "player" + currentPlayers;
+    newDiv.className = "inputdiv";
+
+    let nameInput = document.createElement("input");
+    nameInput.id = "name" + currentPlayers;
+    nameInput.placeholder = "Name...";
+    newDiv.append(nameInput);
+
+    let buyInInput = document.createElement("input");
+    buyInInput.id = "buyIn" + currentPlayers;
+    buyInInput.placeholder = "Bought in for";
+    newDiv.append(buyInInput);
+
+    let chipsInput = document.createElement("input");
+    chipsInput.id = "chips" + currentPlayers;
+    chipsInput.placeholder = "Chips at end of game...";
+    newDiv.append(chipsInput);
+
+    fieldsEl.append(newDiv);
+}
+
+function removePlayer() {
+    clearText();
+    if (currentPlayers <= 2) {
+        errorsEl.textContent = "You must have at least 2 players";
+        return;
+    }
+    let playerDiv = document.querySelector("#player" + currentPlayers);
+    playerDiv.remove();
+    currentPlayers -= 1;
+}
+
+function submit() {
+    clearText();
+    if (!validateInput()) {
+        errorsEl.textContent = "Buy in amount does not match chip amount. Count again."
+        return
+    }
+    let players = [];
+    for(let i=1; i<currentPlayers+1; i++) {
+        let name = document.querySelector("#name" + i).value;
+        let buyIn = Number(document.querySelector("#buyIn" + i).value);
+        let chips = Number(document.querySelector("#chips" + i).value);
+        player = new Player(name, buyIn, chips);
+        players.push(player);
+    }
+    payments = settle(players);
+    paymentsEl.innerHTML = payments;
+
+}
+
+function validateInput() {
+    buyInSum = 0
+    chipSum = 0
+    for(let i=1; i<currentPlayers+1; i++) {
+        buyInSum += Number(document.querySelector("#buyIn" + i).value);
+        chipSum += Number(document.querySelector("#chips" + i).value);
+    }
+    if (buyInSum == chipSum) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+function clearText() {
+    paymentsEl.textContent = "";
+    errorsEl.textContent = "";
+}
 
 function createSubsets(playerList) {
     let subsets = []
@@ -96,7 +184,7 @@ function splitPlayers(playerList) {
     const payees = playerList.filter(p => p.net > 0);
     return [payers, payees];
 }
- 
+
 function playerSort(playerList) {
     return [...playerList].sort((a, b) => Math.abs(a.net) - Math.abs(b.net)).reverse();
 }
@@ -144,7 +232,8 @@ function settle(playerList) {
 
     let payments = []
     payments.push(...(optimalSubsets.map((a) => settleGroup(a))))
-    payments = payments.flat().map((a) => a.toString())
+    payments = payments.flat().map((a) => a.toString()).toString();
+    payments = payments.replaceAll(",", "<br\>")
     return payments
 }
 
