@@ -114,6 +114,7 @@ function validateInput() {
     }
 }
 
+
 function clearText() {
     paymentsEl.textContent = "";
     errorsEl.textContent = "";
