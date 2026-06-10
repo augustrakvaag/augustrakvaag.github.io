@@ -32,18 +32,6 @@ addPlayerEl.addEventListener("click", addPlayer);
 removePlayerEl.addEventListener("click", removePlayer);
 submitEl.addEventListener("click", submit);
 
-player1 = new Player("August", 100, 150);
-player2 = new Player("Josef",100, 50);
-player3 = new Player("Kristian",100,75)
-player4 = new Player("Jack",100,175);
-player5 = new Player("Bendik",100,50);
-players = [];
-players.push(player1);
-players.push(player2);
-players.push(player3);
-players.push(player4);
-players.push(player5);
-
 function addPlayer() {
     clearText();
     currentPlayers += 1;
@@ -237,5 +225,3 @@ function settle(playerList) {
     payments = payments.replaceAll(",", "<br\>")
     return payments
 }
-
-console.log(settle(players));
