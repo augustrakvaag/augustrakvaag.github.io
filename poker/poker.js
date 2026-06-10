@@ -102,7 +102,6 @@ function validateInput() {
     }
 }
 
-
 function clearText() {
     paymentsEl.textContent = "";
     errorsEl.textContent = "";
@@ -178,7 +177,6 @@ function playerSort(playerList) {
     return [...playerList].sort((a, b) => Math.abs(a.net) - Math.abs(b.net)).reverse();
 }
 
-
 function settleGroup(playerList) {
     let payments = [];
     let [payers, payees] = splitPlayers(playerList);
@@ -186,14 +184,10 @@ function settleGroup(playerList) {
     payees = playerSort(payees);
 
     for(let i=0; i<payees.length; i++) {
-        if (payees[i].net == 0){
-            continue;
-        }
+        if (payees[i].net == 0) continue;
         else {
             for(let j=0; j<payers.length; j++) {
-                if (payers[j].net == 0) {
-                    continue;
-                }
+                if (payers[j].net == 0) continue;
                 else {
                     if (payees[i].net >= -payers[j].net) {
                         payments.push(new Payment(payers[j], payees[i], -payers[j].net));
@@ -201,9 +195,9 @@ function settleGroup(playerList) {
                         payers[j].net = 0;
                     }
                     else if (payees[i].net < -payers[j].net) {
-                        payments.push(new Payment(payers[j], payees[i], -payees[i].net));
-                        payees[i].net = 0;
+                        payments.push(new Payment(payers[j], payees[i], payees[i].net));
                         payers[j].net = payers[j].net + payees[i].net;
+                        payees[i].net = 0;
                         break;
                     }
                 }
@@ -215,7 +209,7 @@ function settleGroup(playerList) {
 }
 
 function settle(playerList) {
-    let allPlayerSubsets = createSubsets(playerList)
+    let allPlayerSubsets = createSubsets(playerList);
     let zeroSumSubsets = iterateSubsets(allPlayerSubsets);
     let optimalSubsets = chooseSubsets(zeroSumSubsets);
 
