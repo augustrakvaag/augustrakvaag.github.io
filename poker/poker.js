@@ -1,0 +1,151 @@
+class Player {
+    constructor(name, buyIn, chips) {
+        this.name = name;
+        this.buyIn = buyIn
+        this.chips = chips
+        this.net = chips-buyIn
+    }
+}
+
+class Payment {
+    constructor(payer, payee, amount) {
+        this.payer = payer;
+        this.payee = payee;
+        this.amount = amount;
+    }
+
+    toString() {
+        return this.payer.name + " pays " + this.payee.name + " " + this.amount
+    }
+}
+
+player1 = new Player("August", 100, 150);
+player2 = new Player("Josef",100, 50);
+player3 = new Player("Kristian",100,75)
+player4 = new Player("Jack",100,175)
+player5 = new Player("Bendik",100,50)
+players = [];
+players.push(player1);
+players.push(player2);
+players.push(player3);
+players.push(player4);
+players.push(player5);
+
+function createSubsets(playerList) {
+    let subsets = []
+    let nPlayers = playerList.length
+    let nSubsets = 2**nPlayers;
+
+    for(let i=1; i<nSubsets; i++) {
+        let subset = []
+        let binary = i.toString(2).padStart(nPlayers,0);
+        for(let j=0; j<binary.length; j++){
+            if(binary[j] == 1){
+                subset.push(playerList[j]);
+            }
+        }
+        subsets.push(subset);
+    }
+    return(subsets);
+}
+
+function iterateSubsets(subsetList) {
+    let zeroSumSubsets = [];
+    for(let i=0; i<subsetList.length; i++){
+        let subset = subsetList[i];
+        let subsetSum = 0
+        for(let j=0; j<subset.length; j++){
+            subsetSum += subset[j].net;
+        }
+        if(subsetSum==0){
+            zeroSumSubsets.push(subset);
+        }
+    }
+    return zeroSumSubsets;
+}
+
+function chooseSubsets(zeroSumSubsets) {
+    let bestCount = 0;
+    let bestSelection = [];
+
+    function search(index, usedPlayers, current) {
+        if (index === zeroSumSubsets.length) {
+            if (current.length > bestCount) {
+                bestCount = current.length;
+                bestSelection = [...current];
+            }
+            return;
+        }
+
+        const subset = zeroSumSubsets[index];
+
+        if (!subset.some(p => usedPlayers.has(p.name))) {
+            const newUsed = new Set([...usedPlayers, ...subset.map(p => p.name)]);
+            search(index + 1, newUsed, [...current, subset]);
+        }
+
+        search(index + 1, usedPlayers, current);
+    }
+
+    search(0, new Set(), []);
+    return bestSelection;
+}
+
+function splitPlayers(playerList) {
+    const payers = playerList.filter(p => p.net < 0);
+    const payees = playerList.filter(p => p.net > 0);
+    return [payers, payees];
+}
+ 
+function playerSort(playerList) {
+    return [...playerList].sort((a, b) => Math.abs(a.net) - Math.abs(b.net)).reverse();
+}
+
+
+function settleGroup(playerList) {
+    let payments = [];
+    let [payers, payees] = splitPlayers(playerList);
+    payers = playerSort(payers);
+    payees = playerSort(payees);
+
+    for(let i=0; i<payees.length; i++) {
+        if (payees[i].net == 0){
+            continue;
+        }
+        else {
+            for(let j=0; j<payers.length; j++) {
+                if (payers[j].net == 0) {
+                    continue;
+                }
+                else {
+                    if (payees[i].net >= -payers[j].net) {
+                        payments.push(new Payment(payers[j], payees[i], -payers[j].net));
+                        payees[i].net = payees[i].net + payers[j].net;
+                        payers[j].net = 0;
+                    }
+                    else if (payees[i].net < -payers[j].net) {
+                        payments.push(new Payment(payers[j], payees[i], -payees[i].net));
+                        payees[i].net = 0;
+                        payers[j].net = payers[j].net + payees[i].net;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    return payments;
+}
+
+function settle(playerList) {
+    let allPlayerSubsets = createSubsets(playerList)
+    let zeroSumSubsets = iterateSubsets(allPlayerSubsets);
+    let optimalSubsets = chooseSubsets(zeroSumSubsets);
+
+    let payments = []
+    payments.push(...(optimalSubsets.map((a) => settleGroup(a))))
+    payments = payments.flat().map((a) => a.toString())
+    return payments
+}
+
+console.log(settle(players));
