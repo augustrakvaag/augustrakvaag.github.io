@@ -46,7 +46,7 @@ function addPlayer() {
 
     let buyInInput = document.createElement("input");
     buyInInput.id = "buyIn" + currentPlayers;
-    buyInInput.placeholder = "Bought in for";
+    buyInInput.placeholder = "Bought in for...";
     newDiv.append(buyInInput);
 
     let chipsInput = document.createElement("input");
