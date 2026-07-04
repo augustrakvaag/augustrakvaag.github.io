@@ -2,7 +2,7 @@ let dagerTekstEl = document.querySelector("#dagerTekst");
 let morgenjoggTekstEl = document.querySelector("#morgenjoggTekst");
 let sekunderTekstEl = document.querySelector("#sekunderTekst");
 
-let start = 1782568800;
+let start = 1814004000;
 
 function calculateDifference(){
     let time = Date.now() / 1000;
