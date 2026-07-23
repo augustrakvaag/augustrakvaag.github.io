@@ -34,6 +34,10 @@ submitEl.addEventListener("click", submit);
 
 function addPlayer() {
     clearText();
+    if (currentPlayers >= 50) {
+        errorsEl.textContent = "You can have maximum 50 players";
+        return;
+    }
     currentPlayers += 1;
     let newDiv = document.createElement("div");
     newDiv.id = "player" + currentPlayers;
