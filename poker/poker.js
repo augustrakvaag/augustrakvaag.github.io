@@ -87,7 +87,7 @@ function submit() {
         players.push(player);
     }
     payments = settle(players);
-    paymentsEl.innerHTML = payments;
+    paymentsEl.textContent = payments;
 
 }
 
