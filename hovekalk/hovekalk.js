@@ -21,4 +21,4 @@ function updatePage(seconds){
     sekunderTekstEl.innerHTML = Math.floor(seconds) + " sekunder";
 }
 
-updatePage(calculateDifference())
+setInterval(() => updatePage(calculateDifference()), 1000);
