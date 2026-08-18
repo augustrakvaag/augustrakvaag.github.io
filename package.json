@@ -4,7 +4,10 @@
   "description": "My Github pages is a collection of personal html/js projects. They mostly stem from needing a really niche tool that doesn't exist anywhere else.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "repository": {
     "type": "git",
