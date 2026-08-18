@@ -1,5 +1,9 @@
 class Player {
-    constructor(name, buyIn, chips) {
+    name: string
+    buyIn: number
+    chips: number
+    net: number
+    constructor(name: string, buyIn: number, chips: number) {
         this.name = name;
         this.buyIn = buyIn;
         this.chips = chips;
@@ -8,7 +12,10 @@ class Player {
 }
 
 class Payment {
-    constructor(payer, payee, amount) {
+    payer: Player
+    payee: Player
+    amount: number
+    constructor(payer: Player, payee: Player, amount: number) {
         this.payer = payer;
         this.payee = payee;
         this.amount = amount;
@@ -28,14 +35,14 @@ let fieldsEl = document.querySelector("#fields");
 let errorsEl = document.querySelector("#errors");
 let paymentsEl = document.querySelector("#payments")
 
-addPlayerEl.addEventListener("click", addPlayer);
-removePlayerEl.addEventListener("click", removePlayer);
-submitEl.addEventListener("click", submit);
+addPlayerEl!.addEventListener("click", addPlayer);
+removePlayerEl!.addEventListener("click", removePlayer);
+submitEl!.addEventListener("click", submit);
 
 function addPlayer() {
     clearText();
     if (currentPlayers >= 50) {
-        errorsEl.textContent = "You can have maximum 50 players";
+        errorsEl!.textContent = "You can have maximum 50 players";
         return;
     }
     currentPlayers += 1;
@@ -58,45 +65,45 @@ function addPlayer() {
     chipsInput.placeholder = "Chips at end of game...";
     newDiv.append(chipsInput);
 
-    fieldsEl.append(newDiv);
+    fieldsEl!.append(newDiv);
 }
 
 function removePlayer() {
     clearText();
     if (currentPlayers <= 2) {
-        errorsEl.textContent = "You must have at least 2 players";
+        errorsEl!.textContent = "You must have at least 2 players";
         return;
     }
     let playerDiv = document.querySelector("#player" + currentPlayers);
-    playerDiv.remove();
+    playerDiv!.remove();
     currentPlayers -= 1;
 }
 
 function submit() {
     clearText();
     if (!validateInput()) {
-        errorsEl.textContent = "Buy in amount does not match chip amount. Count again."
+        errorsEl!.textContent = "Buy in amount does not match chip amount. Count again."
         return
     }
-    let players = [];
+    let players: Player[] = [];
     for(let i=1; i<currentPlayers+1; i++) {
-        let name = document.querySelector("#name" + i).value;
-        let buyIn = Number(document.querySelector("#buyIn" + i).value);
-        let chips = Number(document.querySelector("#chips" + i).value);
-        player = new Player(name, buyIn, chips);
+        let name = document.querySelector<HTMLInputElement>("#name" + i)!.value;
+        let buyIn = Number(document.querySelector<HTMLInputElement>("#buyIn" + i)?.value);
+        let chips = Number(document.querySelector<HTMLInputElement>("#chips" + i)?.value);
+        let player = new Player(name, buyIn, chips);
         players.push(player);
     }
-    payments = settle(players);
-    paymentsEl.textContent = payments;
+    let payments = settle(players);
+    paymentsEl!.textContent = payments;
 
 }
 
 function validateInput() {
-    buyInSum = 0
-    chipSum = 0
+    let buyInSum = 0
+    let chipSum = 0
     for(let i=1; i<currentPlayers+1; i++) {
-        buyInSum += Number(document.querySelector("#buyIn" + i).value);
-        chipSum += Number(document.querySelector("#chips" + i).value);
+        buyInSum += Number(document.querySelector<HTMLInputElement>("#buyIn" + i)?.value);
+        chipSum += Number(document.querySelector<HTMLInputElement>("#chips" + i)?.value);
     }
     if (buyInSum == chipSum) {
         return true;
@@ -107,20 +114,20 @@ function validateInput() {
 }
 
 function clearText() {
-    paymentsEl.textContent = "";
-    errorsEl.textContent = "";
+    paymentsEl!.textContent = "";
+    errorsEl!.textContent = "";
 }
 
-function createSubsets(playerList) {
+function createSubsets(playerList: Player[]) {
     let subsets = []
     let nPlayers = playerList.length
     let nSubsets = 2**nPlayers;
 
     for(let i=1; i<nSubsets; i++) {
         let subset = []
-        let binary = i.toString(2).padStart(nPlayers,0);
+        let binary = i.toString(2).padStart(nPlayers,"0");
         for(let j=0; j<binary.length; j++){
-            if(binary[j] == 1){
+            if(binary[j] == "1"){
                 subset.push(playerList[j]);
             }
         }
@@ -129,7 +136,7 @@ function createSubsets(playerList) {
     return(subsets);
 }
 
-function iterateSubsets(subsetList) {
+function iterateSubsets(subsetList: Player[][]) {
     let zeroSumSubsets = [];
     for(let i=0; i<subsetList.length; i++){
         let subset = subsetList[i];
@@ -144,11 +151,11 @@ function iterateSubsets(subsetList) {
     return zeroSumSubsets;
 }
 
-function chooseSubsets(zeroSumSubsets) {
+function chooseSubsets(zeroSumSubsets: Player[][]) {
     let bestCount = 0;
-    let bestSelection = [];
+    let bestSelection: Player[][] = [];
 
-    function search(index, usedPlayers, current) {
+    function search(index: number, usedPlayers: Set<string>, current: Player[][]) {
         if (index === zeroSumSubsets.length) {
             if (current.length > bestCount) {
                 bestCount = current.length;
@@ -171,17 +178,17 @@ function chooseSubsets(zeroSumSubsets) {
     return bestSelection;
 }
 
-function splitPlayers(playerList) {
+function splitPlayers(playerList: Player[]) {
     const payers = playerList.filter(p => p.net < 0);
     const payees = playerList.filter(p => p.net > 0);
     return [payers, payees];
 }
 
-function playerSort(playerList) {
+function playerSort(playerList: Player[]) {
     return [...playerList].sort((a, b) => Math.abs(a.net) - Math.abs(b.net)).reverse();
 }
 
-function settleGroup(playerList) {
+function settleGroup(playerList: Player[]) {
     let payments = [];
     let [payers, payees] = splitPlayers(playerList);
     payers = playerSort(payers);
@@ -212,14 +219,13 @@ function settleGroup(playerList) {
     return payments;
 }
 
-function settle(playerList) {
+function settle(playerList: Player[]) {
     let allPlayerSubsets = createSubsets(playerList);
     let zeroSumSubsets = iterateSubsets(allPlayerSubsets);
     let optimalSubsets = chooseSubsets(zeroSumSubsets);
 
-    let payments = []
-    payments.push(...(optimalSubsets.map((a) => settleGroup(a))))
-    payments = payments.flat().map((a) => a.toString()).toString();
-    payments = payments.replaceAll(",", "\n")
-    return payments
+    let payments: Payment[] = [];
+    payments.push(...optimalSubsets.map((a) => settleGroup(a)).flat());
+    let paymentsText = payments.map((a) => a.toString()).join("\n");
+    return paymentsText;
 }

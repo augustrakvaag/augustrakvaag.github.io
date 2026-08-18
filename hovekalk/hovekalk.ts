@@ -10,15 +10,15 @@ function calculateDifference(){
     return timeLeft;
 }
 
-function updatePage(seconds){
+function updatePage(seconds: number){   
     let minutes = seconds/60;
     let hours = minutes/60;
     let days = hours/24;
     let weeks = days/7;
 
-    dagerTekstEl.innerHTML = "Det er " + Math.floor(days) + " dager til Trollveggen";
-    morgenjoggTekstEl.innerHTML = Math.floor(weeks) + " morgenjogg";
-    sekunderTekstEl.innerHTML = Math.floor(seconds) + " sekunder";
+    dagerTekstEl!.innerHTML = "Det er " + Math.floor(days) + " dager til Trollveggen";
+    morgenjoggTekstEl!.innerHTML = Math.floor(weeks) + " morgenjogg";
+    sekunderTekstEl!.innerHTML = Math.floor(seconds) + " sekunder";
 }
 
 setInterval(() => updatePage(calculateDifference()), 1000);
