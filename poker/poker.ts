@@ -226,6 +226,6 @@ function settle(playerList: Player[]) {
 
     let payments: Payment[] = [];
     payments.push(...optimalSubsets.map((a) => settleGroup(a)).flat());
-    let paymentsText = payments.map((a) => a.toString()).join("<br>");
+    let paymentsText = payments.map((a) => a.toString()).join("\n");
     return paymentsText;
 }
