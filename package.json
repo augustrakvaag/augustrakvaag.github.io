@@ -16,5 +16,9 @@
   "bugs": {
     "url": "https://github.com/augustrakvaag/augustrakvaag.github.io/issues"
   },
-  "homepage": "https://github.com/augustrakvaag/augustrakvaag.github.io#readme"
+  "homepage": "https://github.com/augustrakvaag/augustrakvaag.github.io#readme",
+  "devDependencies": {
+    "typescript": "^7.0.2",
+    "vite": "^8.2.1"
+  }
 }
